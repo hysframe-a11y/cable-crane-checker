@@ -87,10 +87,103 @@
   .rv{font-size:13px}
   .sf-badge{font-size:12px}
 }
+
+/* ── 起動アニメーション ── */
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;background:#0d1f3d;
+        overflow:hidden;transition:opacity .5s ease}
+#splash.splash-hide{opacity:0;pointer-events:none}
+#splash .splash-svg{width:min(88vw,640px);height:auto;display:block}
+#splash .tower{opacity:0;animation:riseTower .55s cubic-bezier(.2,.8,.3,1) forwards}
+#splash .tower-left{animation-delay:.05s}
+#splash .tower-right{animation-delay:.2s}
+#splash .cable{stroke-dasharray:640;stroke-dashoffset:640;
+               animation:drawCable .6s ease-out .5s forwards}
+#splash .carriage{opacity:0;animation:travel 1.2s cubic-bezier(.45,.05,.35,1) .95s forwards}
+#splash .hook-load{transform-box:fill-box;transform-origin:0px -22px;
+                    animation:sway 1.2s ease-in-out .95s forwards}
+#splash .splash-text{margin-top:16px;text-align:center;opacity:0;
+                     animation:fadeUp .5s ease-out 1.9s forwards}
+#splash .splash-title{color:#fff;font-size:14px;font-weight:600;letter-spacing:.04em}
+#splash .splash-sub{color:rgba(255,255,255,.5);font-size:10px;margin-top:5px;letter-spacing:.1em}
+
+@keyframes riseTower{from{opacity:0;transform:scaleY(.15)}to{opacity:1;transform:scaleY(1)}}
+@keyframes drawCable{to{stroke-dashoffset:0}}
+@keyframes travel{
+  0%{opacity:1;transform:translate(130px,90px)}
+  25%{transform:translate(265px,142.8px)}
+  50%{transform:translate(400px,156.25px)}
+  75%{transform:translate(535px,130.3px)}
+  100%{opacity:1;transform:translate(670px,65px)}
+}
+@keyframes sway{
+  0%,100%{transform:rotate(0deg)}
+  20%{transform:rotate(-7deg)}
+  50%{transform:rotate(5deg)}
+  80%{transform:rotate(-3deg)}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media (prefers-reduced-motion: reduce){
+  #splash .tower,#splash .cable,#splash .carriage,#splash .hook-load,#splash .splash-text{
+    animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important
+  }
+}
 </style>
 </head>
 <body>
 <h2 class="sr-only">ケーブルクレーン安全率チェッカー v3 径→構成→種別連動</h2>
+
+<div id="splash" aria-hidden="true">
+  <svg class="splash-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a1830"/>
+        <stop offset="55%" stop-color="#1a3a6b"/>
+        <stop offset="100%" stop-color="#2c5490"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="450" fill="url(#skyGrad)"/>
+    <path d="M0,300 L100,300 Q260,340 400,330 Q560,300 640,260 L800,250 L800,450 L0,450 Z" fill="#132a4f"/>
+    <path d="M0,345 L90,345 Q250,390 400,380 Q550,340 620,300 L800,290 L800,450 L0,450 Z" fill="#0e2038"/>
+
+    <g class="tower tower-left" style="transform-origin:130px 340px">
+      <rect x="92" y="333" width="76" height="9" rx="2" fill="#0a1830"/>
+      <line x1="100" y1="340" x2="130" y2="90" stroke="#d7dee8" stroke-width="4"/>
+      <line x1="160" y1="340" x2="130" y2="90" stroke="#d7dee8" stroke-width="4"/>
+      <line x1="107" y1="300" x2="153" y2="300" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="112" y1="250" x2="148" y2="250" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="117" y1="200" x2="143" y2="200" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="121" y1="150" x2="139" y2="150" stroke="#d7dee8" stroke-width="2.5"/>
+      <circle cx="130" cy="90" r="6" fill="#e8b84b"/>
+    </g>
+
+    <g class="tower tower-right" style="transform-origin:670px 290px">
+      <rect x="632" y="283" width="76" height="9" rx="2" fill="#0a1830"/>
+      <line x1="640" y1="290" x2="670" y2="65" stroke="#d7dee8" stroke-width="4"/>
+      <line x1="700" y1="290" x2="670" y2="65" stroke="#d7dee8" stroke-width="4"/>
+      <line x1="647" y1="255" x2="693" y2="255" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="652" y1="215" x2="688" y2="215" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="657" y1="175" x2="683" y2="175" stroke="#d7dee8" stroke-width="2.5"/>
+      <line x1="661" y1="135" x2="679" y2="135" stroke="#d7dee8" stroke-width="2.5"/>
+      <circle cx="670" cy="65" r="6" fill="#e8b84b"/>
+    </g>
+
+    <path class="cable" d="M130,90 Q400,235 670,65" fill="none" stroke="#e8b84b" stroke-width="3"/>
+
+    <g class="carriage">
+      <rect x="-14" y="-6" width="28" height="12" rx="2" fill="#e8b84b"/>
+      <line x1="0" y1="6" x2="0" y2="44" stroke="#dfe6ee" stroke-width="2"/>
+      <g class="hook-load" transform="translate(0,44)">
+        <rect x="-15" y="0" width="30" height="20" rx="3" fill="#cc3b30"/>
+      </g>
+    </g>
+  </svg>
+  <div class="splash-text">
+    <div class="splash-title">ケーブルクレーン安全率チェッカー</div>
+    <div class="splash-sub">LOADING…</div>
+  </div>
+</div>
 
 <div class="wrap" id="mainWrap">
 <div class="left" id="paneInput">
@@ -497,6 +590,23 @@ document.addEventListener('DOMContentLoaded',()=>{
   setupRope('41',12,'6*19','A');
   setupRope('42',14,'6*19','A');
 });
+</script>
+<script>
+// ── 起動アニメーション（スプラッシュ）制御 ──
+(function(){
+  const splash=document.getElementById('splash');
+  if(!splash)return;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let dismissed=false;
+  function dismiss(){
+    if(dismissed)return;
+    dismissed=true;
+    splash.classList.add('splash-hide');
+    setTimeout(()=>splash.remove(),550);
+  }
+  splash.addEventListener('click',dismiss);
+  setTimeout(dismiss,reduced?700:2500);
+})();
 </script>
 </body>
 </html>
