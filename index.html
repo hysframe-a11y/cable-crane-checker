@@ -40,10 +40,12 @@
 .sf-badge{font-size:11px;font-weight:700;padding:1px 10px;border-radius:20px}
 .sf-ok{color:#1a6b1a;background:#e6f4ea}
 .sf-out{color:#cc0000;background:#fce8e6}
+.sf-na{color:var(--text-muted);background:var(--surface-1)}
 .bar-track{position:relative;height:15px;background:var(--surface-1);border-radius:8px;overflow:visible}
 .bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:8px;transition:width .25s}
 .bar-ok{background:linear-gradient(90deg,#52a052,#1a6b1a)}
 .bar-out{background:linear-gradient(90deg,#e05050,#cc0000)}
+.bar-na{background:transparent}
 .bar-mark{position:absolute;top:-3px;width:2px;height:21px;background:#1a3a6b;border-radius:1px}
 .bar-mark-label{position:absolute;top:-15px;font-size:9px;font-weight:700;color:#1a3a6b;white-space:nowrap}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -56,6 +58,7 @@
 .verdict{text-align:center;font-weight:700;font-size:12px;padding:6px;border-radius:5px;margin-top:7px}
 .v-ok{color:#1a6b1a;background:#e6f4ea}
 .v-out{color:#cc0000;background:#fce8e6}
+.v-na{color:var(--text-muted);background:var(--surface-1)}
 .snr{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;padding:3px 6px;border-radius:4px}
 .snv{font-size:12px;font-family:monospace;font-weight:700}
 
@@ -417,12 +420,13 @@ function calcAll(p){
   return{al,yl,hd,QN,QE,NV,ww,wl,wy,wc,w1,w2,w3,qv,ws,pt,xn,ro,gs,ss,sa,za,sb,zb,tq,tm,too,zs,ts,tsb,bt,tp,tr,to,kwH,kwT,y18,y32,y45};
 }
 
-const f4=v=>typeof v==='number'?v.toFixed(4):'—';
+const f4=v=>(typeof v==='number'&&Number.isFinite(v))?v.toFixed(4):'—';
 function setR(id,val){const el=document.getElementById(id);if(el)el.textContent=f4(val);}
 function setBar(bf,bm,bml,val,th,mx){
-  const p=Math.min(val/mx,1)*100,t=Math.min(th/mx,1)*100;
+  const na=!Number.isFinite(val);
+  const p=na?0:Math.min(val/mx,1)*100,t=Math.min(th/mx,1)*100;
   bf.style.width=p+'%';
-  bf.className='bar-fill '+(val>th?'bar-ok':'bar-out');
+  bf.className='bar-fill '+(na?'bar-na':(val>th?'bar-ok':'bar-out'));
   bm.style.left=t+'%';
   bml.textContent='≧'+th;
 }
@@ -456,7 +460,7 @@ function update(){
     mm:gv('mm'),mo:gv('mo'),so:gv('so'),ui:document.getElementById('ui').value,
     v:gv('v'),zl:gv('zl'),zm:gv('zm'),q40,p40,q41,p41,q42,p42,k40d,k41d,k42d,sf};
   let r;try{r=calcAll(p)}catch(e){return;}
-  document.getElementById('ww').value=r.ww.toFixed(3);
+  document.getElementById('ww').value=Number.isFinite(r.ww)?r.ww.toFixed(3):'';
 
   document.getElementById('grade-label').textContent='必要安全率 '+sf+'（巻上索・横行索）';
   [['AL',r.al],['YL',r.yl],['QN',r.QN],['QE',r.QE],['HD',r.hd],
@@ -470,24 +474,27 @@ function update(){
 
   const mx=8;
   [[r.y18,2.7,'18'],[r.y32,sf,'32'],[r.y45,sf,'45']].forEach(([y,th,bi])=>{
-    const ok=y>th;
-    document.getElementById('b'+bi).textContent=y.toFixed(4)+' '+(ok?'✓ OK':'✗ OUT');
-    document.getElementById('b'+bi).className='sf-badge '+(ok?'sf-ok':'sf-out');
+    const na=!Number.isFinite(y);
+    const ok=!na&&y>th;
+    document.getElementById('b'+bi).textContent=na?'—':(y.toFixed(4)+' '+(ok?'✓ OK':'✗ OUT'));
+    document.getElementById('b'+bi).className='sf-badge '+(na?'sf-na':(ok?'sf-ok':'sf-out'));
     setBar(document.getElementById('bf'+bi),document.getElementById('bm'+bi),document.getElementById('bml'+bi),y,th,mx);
-    document.getElementById('nr'+bi).style.background=ok?'#e6f4ea':'#fce8e6';
-    document.getElementById('nv'+bi).textContent=y.toFixed(4);
-    document.getElementById('nv'+bi).style.color=ok?'#1a6b1a':'#cc0000';
+    document.getElementById('nr'+bi).style.background=na?'var(--surface-1)':(ok?'#e6f4ea':'#fce8e6');
+    document.getElementById('nv'+bi).textContent=na?'—':y.toFixed(4);
+    document.getElementById('nv'+bi).style.color=na?'var(--text-muted)':(ok?'#1a6b1a':'#cc0000');
   });
-  sfChart.data.datasets[0].data=[r.y18,r.y32,r.y45];
+  const chartVal=y=>Number.isFinite(y)?y:0;
+  sfChart.data.datasets[0].data=[chartVal(r.y18),chartVal(r.y32),chartVal(r.y45)];
   sfChart.data.datasets[0].backgroundColor=[
-    r.y18>2.7?'#1a6b1a':'#cc0000',
-    r.y32>sf?'#1a6b1a':'#cc0000',
-    r.y45>sf?'#1a6b1a':'#cc0000'];
+    Number.isFinite(r.y18)&&r.y18>2.7?'#1a6b1a':(Number.isFinite(r.y18)?'#cc0000':'#cccccc'),
+    Number.isFinite(r.y32)&&r.y32>sf?'#1a6b1a':(Number.isFinite(r.y32)?'#cc0000':'#cccccc'),
+    Number.isFinite(r.y45)&&r.y45>sf?'#1a6b1a':(Number.isFinite(r.y45)?'#cc0000':'#cccccc')];
   sfChart.update();
-  const allOk=r.y18>2.7&&r.y32>sf&&r.y45>sf;
+  const anyNa=![r.y18,r.y32,r.y45].every(Number.isFinite);
+  const allOk=!anyNa&&r.y18>2.7&&r.y32>sf&&r.y45>sf;
   const vd=document.getElementById('verd');
-  vd.textContent=allOk?'✓ 全項目 OK':'✗ NG あり — 要確認';
-  vd.className='verdict '+(allOk?'v-ok':'v-out');
+  vd.textContent=anyNa?'— 未入力':(allOk?'✓ 全項目 OK':'✗ NG あり — 要確認');
+  vd.className='verdict '+(anyNa?'v-na':(allOk?'v-ok':'v-out'));
 }
 
 // JSON の data キーは "12.0" のような文字列。
