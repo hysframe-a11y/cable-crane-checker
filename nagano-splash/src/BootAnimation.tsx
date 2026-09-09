@@ -13,8 +13,8 @@ const CX = 540;
 const CY = 800;
 const R = 300;
 const RING_WIDTH = 84;
-const BAND_HEIGHT = 128;
-const BAND_WIDTH = R * 2.06;
+const BAND_HEIGHT = 104;
+const BAND_WIDTH = R * 2;
 const RING_COLOR = "#1EA854";
 
 export const BootAnimationComposition = () => {
@@ -219,8 +219,8 @@ export const BootAnimation: React.FC = () => {
           style={{ position: "absolute", inset: 0, overflow: "visible" }}
         >
           <defs>
-            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#5fe09a" />
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#2fc06c" />
               <stop offset="100%" stopColor={RING_COLOR} />
             </linearGradient>
             <mask id="growMask">
@@ -269,7 +269,7 @@ export const BootAnimation: React.FC = () => {
                   style={{
                     rotate: "34deg",
                     transformOrigin: `${CX}px ${CY}px`,
-                    opacity: interpolate(frame, [9, 14, 30, 36], [0, 0.9, 0.9, 0], {
+                    opacity: interpolate(frame, [9, 13, 18, 21], [0, 0.9, 0.9, 0], {
                       extrapolateLeft: "clamp",
                       extrapolateRight: "clamp",
                     }),
