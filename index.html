@@ -97,51 +97,25 @@
         overflow:hidden;transition:opacity .5s ease}
 #splash.splash-hide{opacity:0;pointer-events:none}
 #splash .scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-#splash .scene-crane{animation:craneFadeOut .4s ease-in 2.2s forwards}
-#splash .splash-svg{width:min(88vw,640px);height:auto;display:block}
-#splash .tower{opacity:0;animation:riseTower .55s cubic-bezier(.2,.8,.3,1) forwards}
-#splash .tower-left{animation-delay:.05s}
-#splash .tower-right{animation-delay:.2s}
-#splash .cable{stroke-dasharray:640;stroke-dashoffset:640;
-               animation:drawCable .6s ease-out .5s forwards}
-#splash .carriage{opacity:0;animation:travel 1.2s cubic-bezier(.45,.05,.35,1) .95s forwards}
-#splash .hook-load{transform-box:fill-box;transform-origin:0px -22px;
-                    animation:sway 1.2s ease-in-out .95s forwards}
 #splash .logo-wrap{position:relative;width:min(34vw,180px);aspect-ratio:1/1;
                   filter:drop-shadow(0 8px 22px rgba(0,0,0,.4))}
 #splash .logo-wrap img,#splash .logo-wrap svg{position:absolute;inset:0;width:100%;height:100%}
 #splash .logo-mark{opacity:0;transform:translateY(14px) scale(.92);
-                   animation:emerge .6s ease-out 3.15s forwards}
+                   animation:emerge .6s ease-out 1.05s forwards}
 #splash .logo-lines line{fill:none;stroke:#141414;stroke-linecap:round}
 #splash .logo-lines .ln1{stroke-width:13;stroke-dasharray:686;stroke-dashoffset:686;
-                         animation:drawLine .32s ease-out 2.3s forwards}
+                         animation:drawLine .32s ease-out .2s forwards}
 #splash .logo-lines .ln2{stroke-width:4;stroke-dasharray:686;stroke-dashoffset:686;
-                         animation:drawLine .32s ease-out 2.55s forwards}
+                         animation:drawLine .32s ease-out .45s forwards}
 #splash .logo-lines .ln3{stroke-width:4;stroke-dasharray:681;stroke-dashoffset:681;
-                         animation:drawLine .32s ease-out 2.8s forwards}
+                         animation:drawLine .32s ease-out .7s forwards}
 #splash .splash-text{position:absolute;left:0;right:0;bottom:16%;text-align:center;opacity:0;
-                     animation:fadeUp .5s ease-out 3.85s forwards}
+                     animation:fadeUp .5s ease-out 1.75s forwards}
 #splash .splash-title{color:#fff;font-size:14px;font-weight:600;letter-spacing:.04em;
                       text-shadow:0 1px 4px rgba(0,0,0,.45)}
 #splash .splash-sub{color:rgba(255,255,255,.65);font-size:10px;margin-top:5px;letter-spacing:.1em;
                     text-shadow:0 1px 4px rgba(0,0,0,.45)}
 
-@keyframes riseTower{from{opacity:0;transform:scaleY(.15)}to{opacity:1;transform:scaleY(1)}}
-@keyframes drawCable{to{stroke-dashoffset:0}}
-@keyframes travel{
-  0%{opacity:1;transform:translate(130px,90px)}
-  25%{transform:translate(265px,142.8px)}
-  50%{transform:translate(400px,156.25px)}
-  75%{transform:translate(535px,130.3px)}
-  100%{opacity:1;transform:translate(670px,65px)}
-}
-@keyframes sway{
-  0%,100%{transform:rotate(0deg)}
-  20%{transform:rotate(-7deg)}
-  50%{transform:rotate(5deg)}
-  80%{transform:rotate(-3deg)}
-}
-@keyframes craneFadeOut{to{opacity:0}}
 @keyframes emerge{
   0%{opacity:0;transform:translateY(14px) scale(.92)}
   100%{opacity:1;transform:translateY(0) scale(1)}
@@ -150,7 +124,6 @@
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 @media (prefers-reduced-motion: reduce){
-  #splash .scene-crane{display:none}
   #splash .logo-lines line{stroke-dashoffset:0!important;animation:none!important}
   #splash .logo-mark,#splash .splash-text{
     animation:none!important;opacity:1!important;transform:none!important
@@ -162,54 +135,6 @@
 <h2 class="sr-only">ケーブルクレーン安全率チェッカー v3 径→構成→種別連動</h2>
 
 <div id="splash" aria-hidden="true">
-  <div class="scene scene-crane">
-  <svg class="splash-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet">
-    <defs>
-      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#2c1e42"/>
-        <stop offset="35%" stop-color="#6b3a5e"/>
-        <stop offset="65%" stop-color="#d1637a"/>
-        <stop offset="85%" stop-color="#f2965a"/>
-        <stop offset="100%" stop-color="#ffce7a"/>
-      </linearGradient>
-    </defs>
-    <rect width="800" height="450" fill="url(#skyGrad)"/>
-    <path d="M0,300 L100,300 Q260,340 400,330 Q560,300 640,260 L800,250 L800,450 L0,450 Z" fill="#4a2f52"/>
-    <path d="M0,345 L90,345 Q250,390 400,380 Q550,340 620,300 L800,290 L800,450 L0,450 Z" fill="#2a1b33"/>
-
-    <g class="tower tower-left" style="transform-origin:130px 340px">
-      <rect x="92" y="333" width="76" height="9" rx="2" fill="#1a1024"/>
-      <line x1="100" y1="340" x2="130" y2="90" stroke="#241a2e" stroke-width="4"/>
-      <line x1="160" y1="340" x2="130" y2="90" stroke="#241a2e" stroke-width="4"/>
-      <line x1="107" y1="300" x2="153" y2="300" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="112" y1="250" x2="148" y2="250" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="117" y1="200" x2="143" y2="200" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="121" y1="150" x2="139" y2="150" stroke="#241a2e" stroke-width="2.5"/>
-      <circle cx="130" cy="90" r="6" fill="#e8b84b"/>
-    </g>
-
-    <g class="tower tower-right" style="transform-origin:670px 290px">
-      <rect x="632" y="283" width="76" height="9" rx="2" fill="#1a1024"/>
-      <line x1="640" y1="290" x2="670" y2="65" stroke="#241a2e" stroke-width="4"/>
-      <line x1="700" y1="290" x2="670" y2="65" stroke="#241a2e" stroke-width="4"/>
-      <line x1="647" y1="255" x2="693" y2="255" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="652" y1="215" x2="688" y2="215" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="657" y1="175" x2="683" y2="175" stroke="#241a2e" stroke-width="2.5"/>
-      <line x1="661" y1="135" x2="679" y2="135" stroke="#241a2e" stroke-width="2.5"/>
-      <circle cx="670" cy="65" r="6" fill="#e8b84b"/>
-    </g>
-
-    <path class="cable" d="M130,90 Q400,235 670,65" fill="none" stroke="#e8b84b" stroke-width="3"/>
-
-    <g class="carriage">
-      <rect x="-14" y="-6" width="28" height="12" rx="2" fill="#e8b84b"/>
-      <line x1="0" y1="6" x2="0" y2="44" stroke="#3a2438" stroke-width="2"/>
-      <g class="hook-load" transform="translate(0,44)">
-        <rect x="-15" y="0" width="30" height="20" rx="3" fill="#cc3b30"/>
-      </g>
-    </g>
-  </svg>
-  </div>
   <div class="scene scene-logo">
     <div class="logo-wrap">
       <svg class="logo-lines" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
@@ -650,7 +575,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>splash.remove(),550);
   }
   splash.addEventListener('click',dismiss);
-  setTimeout(dismiss,reduced?900:4950);
+  setTimeout(dismiss,reduced?900:2800);
 })();
 </script>
 </body>
