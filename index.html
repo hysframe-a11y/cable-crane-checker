@@ -110,13 +110,19 @@
 #splash .wf-ln1{stroke-dasharray:512;stroke-dashoffset:512;animation:wfDraw .2s ease-out .02s forwards}
 #splash .wf-ln2{stroke-dasharray:512;stroke-dashoffset:512;animation:wfDraw .2s ease-out .05s forwards}
 #splash .wf-ln3{stroke-dasharray:512;stroke-dashoffset:512;animation:wfDraw .2s ease-out .08s forwards}
+#splash .wf-cross{stroke:#00e5ff;stroke-width:1;stroke-dasharray:4 4;opacity:0;
+                  animation:wfFadeIn .1s ease-out .04s forwards}
+#splash .wf-dot{fill:#00e5ff;opacity:0;animation:wfFadeIn .1s ease-out .12s forwards}
+#splash .wf-label{fill:#00e5ff;font-size:9px;font-family:'Courier New',monospace;opacity:0;
+                  animation:wfFadeIn .1s ease-out .16s forwards}
 
-#splash .ring{fill:none;stroke:#00c875;stroke-width:46;opacity:0;
+#splash .ring{fill:none;stroke:url(#greenGloss);stroke-width:46;opacity:0;
              transform-box:fill-box;transform-origin:50% 50%;
              animation:ringIn .22s cubic-bezier(.3,1.4,.4,1) .3s forwards}
-#splash .bar{fill:#00c875}
+#splash .bar{fill:url(#greenGloss)}
 #splash .bar-left{opacity:0;transform:translateX(-140px);animation:slideL .28s cubic-bezier(.3,1.4,.4,1) .3s forwards}
 #splash .bar-right{opacity:0;transform:translateX(140px);animation:slideR .28s cubic-bezier(.3,1.4,.4,1) .3s forwards}
+#splash .ring-shine{fill:#ffffff;opacity:0;animation:shineIn .22s ease-out .36s forwards}
 #splash .dl{stroke:#0a0a0a;stroke-linecap:round;opacity:0}
 #splash .dl1{stroke-width:10;animation:snapIn1 .24s cubic-bezier(.3,1.4,.4,1) .34s forwards}
 #splash .dl2{stroke-width:3;animation:snapIn2 .24s cubic-bezier(.3,1.4,.4,1) .40s forwards}
@@ -131,10 +137,17 @@
                      border-radius:50%;background:radial-gradient(circle,#ffffff 0%,rgba(255,255,255,0) 70%);
                      transform:translate(-50%,-50%) scale(0);opacity:0;
                      animation:burst .35s ease-out 1s forwards}
+#splash .sparkle{position:absolute;left:calc(50% + 50px);top:calc(50% - 52px);
+                 width:26px;height:26px;border-radius:50%;
+                 background:radial-gradient(circle,#ffffff 0%,rgba(255,255,255,0) 70%);
+                 opacity:0;transform:scale(0);
+                 animation:sparkle .3s ease-out .74s forwards}
 
 @keyframes wfDraw{to{stroke-dashoffset:0}}
+@keyframes wfFadeIn{to{opacity:1}}
 @keyframes wfFadeOut{to{opacity:0}}
 @keyframes ringIn{0%{opacity:0;transform:scale(.75) rotate(-18deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes shineIn{0%{opacity:0}100%{opacity:.4}}
 @keyframes slideL{from{opacity:0}to{opacity:1;transform:translateX(0)}}
 @keyframes slideR{from{opacity:0}to{opacity:1;transform:translateX(0)}}
 @keyframes snapIn1{from{opacity:0;transform:translate(-50px,40px)}to{opacity:1;transform:translate(0,0)}}
@@ -143,14 +156,16 @@
 @keyframes textStamp{from{opacity:0;transform:scale(1.25)}to{opacity:1;transform:scale(1)}}
 @keyframes bloomIn{to{opacity:1}}
 @keyframes burst{0%{opacity:.9;transform:translate(-50%,-50%) scale(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(18)}}
+@keyframes sparkle{0%{opacity:0;transform:scale(0)}40%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(.6)}}
 
 @media (prefers-reduced-motion: reduce){
   #splash .wf-layer{display:none}
   #splash .bg-bloom{animation:none!important;opacity:.8!important}
-  #splash .ring,#splash .bar,#splash .dl,#splash .nagano-text{
+  #splash .ring,#splash .bar,#splash .dl,#splash .nagano-text,#splash .ring-shine{
     animation:none!important;opacity:1!important;transform:none!important
   }
-  #splash .white-burst{display:none}
+  #splash .ring-shine{opacity:.4!important}
+  #splash .white-burst,#splash .sparkle{display:none}
 }
 </style>
 </head>
@@ -160,10 +175,23 @@
 <div id="splash" aria-hidden="true">
   <div class="wf-layer">
     <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <filter id="wfGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="20"/>
+        </filter>
+      </defs>
+      <ellipse cx="200" cy="370" rx="170" ry="55" fill="#ffdca8" opacity=".3" filter="url(#wfGlow)"/>
+      <line class="wf-cross" x1="20" y1="200" x2="380" y2="200"/>
+      <line class="wf-cross" x1="200" y1="20" x2="200" y2="380"/>
       <circle class="wf-circle" cx="200" cy="200" r="120"/>
       <line class="wf-ln wf-ln1" x1="5.9" y1="400" x2="362" y2="0"/>
       <line class="wf-ln wf-ln2" x1="26.2" y1="400" x2="382.2" y2="0"/>
       <line class="wf-ln wf-ln3" x1="46.6" y1="400" x2="400" y2="2.8"/>
+      <circle class="wf-dot" cx="200" cy="200" r="3"/>
+      <circle class="wf-dot" cx="5.9" cy="400" r="3"/>
+      <circle class="wf-dot" cx="362" cy="0" r="3"/>
+      <text class="wf-label" x="330" y="14">(362.0, 0.0)</text>
+      <text class="wf-label" x="10" y="392">(5.9, 400.0)</text>
     </svg>
   </div>
   <div class="bg-bloom">
@@ -173,22 +201,43 @@
           <feGaussianBlur stdDeviation="16"/>
         </filter>
       </defs>
-      <path d="M0,560 150,500 300,540 460,480 620,530 780,470 900,510 900,700 0,700 Z" fill="#bfe3cd" opacity=".55" filter="url(#soft)"/>
+      <path d="M0,520 200,460 400,500 600,440 800,490 900,470 900,700 0,700 Z" fill="#d7ecdf" opacity=".4" filter="url(#soft)"/>
+      <path d="M0,560 150,500 300,540 460,480 620,530 780,470 900,510 900,700 0,700 Z" fill="#bfe3cd" opacity=".6" filter="url(#soft)"/>
       <circle cx="180" cy="580" r="46" fill="#ffd9a8" opacity=".45" filter="url(#soft)"/>
-      <circle cx="720" cy="600" r="60" fill="#ffcf9c" opacity=".4" filter="url(#soft)"/>
+      <g opacity=".55" filter="url(#soft)">
+        <line x1="750" y1="640" x2="750" y2="565" stroke="#8a5a3c" stroke-width="8"/>
+        <ellipse cx="750" cy="540" rx="72" ry="52" fill="#a9c9a0"/>
+        <circle cx="718" cy="528" r="10" fill="#e8935a"/>
+        <circle cx="752" cy="555" r="10" fill="#e8935a"/>
+        <circle cx="778" cy="522" r="9" fill="#e8935a"/>
+        <circle cx="728" cy="562" r="9" fill="#e8935a"/>
+        <circle cx="770" cy="558" r="9" fill="#e8935a"/>
+      </g>
     </svg>
   </div>
   <div class="logo-build">
     <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="greenGloss" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6eeab0"/>
+          <stop offset="55%" stop-color="#00c875"/>
+          <stop offset="100%" stop-color="#009a5a"/>
+        </linearGradient>
+        <filter id="softSmall" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="4"/>
+        </filter>
+      </defs>
       <line class="dl dl1" x1="5.9" y1="400" x2="362" y2="0"/>
       <line class="dl dl2" x1="26.2" y1="400" x2="382.2" y2="0"/>
       <line class="dl dl3" x1="46.6" y1="400" x2="400" y2="2.8"/>
       <circle class="ring" cx="200" cy="200" r="120"/>
       <rect class="bar bar-left" x="70" y="177" width="130" height="46"/>
       <rect class="bar bar-right" x="200" y="177" width="130" height="46"/>
+      <ellipse class="ring-shine" cx="132" cy="132" rx="26" ry="12" transform="rotate(-45 132 132)" filter="url(#softSmall)"/>
       <text class="nagano-text" x="200" y="212" text-anchor="middle">NAGANO</text>
     </svg>
     <div class="white-burst"></div>
+    <div class="sparkle"></div>
   </div>
 </div>
 
