@@ -74,21 +74,23 @@
 @media(max-width:767px){
   .wrap{flex-direction:column;height:100vh;height:100dvh}
   .left{width:100%;min-width:unset;border-right:none;border-bottom:1.5px solid #1a3a6b;
-        padding:8px 12px;overflow-y:auto;flex:1;display:none}
+        padding:8px 12px;overflow-y:auto;flex:1;display:none;min-height:0;
+        -webkit-overflow-scrolling:touch}
   .left.active{display:block}
-  .right{padding:8px 10px;flex:1;overflow-y:auto;display:none}
-  .right.active{display:block}
+  .right{padding:8px 10px;flex:1;overflow-y:auto;display:none;min-height:0;
+         -webkit-overflow-scrolling:touch}
+  .right.active{display:flex}
   .tab-bar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:100;
-            background:#1a3a6b;height:calc(52px + env(safe-area-inset-bottom));
+            background:#1a3a6b;height:calc(56px + env(safe-area-inset-bottom));
             padding-bottom:env(safe-area-inset-bottom)}
   .tab-btn{flex:1;border:none;background:transparent;color:rgba(255,255,255,.6);
             font-size:11px;font-family:'Segoe UI',sans-serif;cursor:pointer;
             display:flex;flex-direction:column;align-items:center;justify-content:center;
-            gap:2px;transition:color .2s}
+            gap:2px;min-height:48px;padding:4px 2px;transition:color .2s}
   .tab-btn.active{color:#fff;border-top:2px solid #fff}
   .tab-icon{font-size:18px;line-height:1}
   /* タブバー分の余白（ホームインジケーター領域も加味） */
-  .left,.right{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+  .left,.right{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
   /* カードを1列に */
   .g3{grid-template-columns:1fr!important}
   .g2{grid-template-columns:1fr!important}
@@ -96,6 +98,18 @@
   .field input,.field select{font-size:16px;padding:6px 8px}
   .rv{font-size:13px}
   .sf-badge{font-size:12px}
+  .card{border-radius:6px;padding:10px}
+  .ct{font-size:12px}
+  .rrow{gap:8px;min-height:27px}
+  .rl{min-width:0;overflow-wrap:anywhere}
+  .rv{margin-left:auto;text-align:right}
+  #sfChart{display:block;width:100%!important;height:180px!important}
+}
+@media(max-width:380px){
+  .left{padding-left:9px;padding-right:9px}
+  .right{padding-left:7px;padding-right:7px}
+  .card{padding:8px}
+  .sh{margin-top:7px}
 }
 
 /* ── 起動アニメーション（動画版・全画面）── */
